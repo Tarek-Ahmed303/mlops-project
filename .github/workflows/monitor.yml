@@ -1,1 +1,28 @@
+name: Scheduled Monitoring
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # every hour (adjust as needed)
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    env:
+      LOCAL_H5_PATH: model/resnet50_asl_augmented_frozen.h5
+      MODEL_NAME: ASL-ResNet-Production
+      MONITOR_THRESHOLD: 0.90
+      MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}  # optional
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r src/requirements.txt
+      - name: Run monitor
+        run: python src/monitor.py
 
