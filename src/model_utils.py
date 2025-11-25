@@ -11,7 +11,7 @@ BATCH_SIZE = int(os.environ.get("BATCH_SIZE", 32))
 SEED = int(os.environ.get("SEED", 42))
 
 # IMPORTANT: your model path (as you confirmed)
-LOCAL_H5_PATH = os.environ.get("LOCAL_H5_PATH", "model/resnet50_asl_augmented_frozen.h5")
+LOCAL_H5_PATH = os.environ.get("LOCAL_H5_PATH", "models/resnet50_asl_augmented_frozen.h5")
 
 # Dataset path (change or export ASL_TRAIN_DIR environment variable)
 ASL_TRAIN_DIR = os.environ.get("ASL_TRAIN_DIR", "data/asl_alphabet_train")
