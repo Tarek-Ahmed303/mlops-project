@@ -1,49 +1,61 @@
 name: Evaluate
 
+
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+push:
+branches: [ main ]
+workflow_dispatch:
+
 
 jobs:
-  evaluate:
-    runs-on: ubuntu-latest
-    env:
-      LOCAL_H5_PATH: models/resnet50_asl_augmented_frozen.h5
-      MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}  # optional
+evaluate:
+runs-on: ubuntu-latest
+env:
+LOCAL_H5_PATH: models/resnet50_asl_augmented_frozen.h5
+MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
 
-    steps:
-      - name: Checkout repo (with LFS)
-        uses: actions/checkout@v4
-        with:
-          lfs: true
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
+steps:
+- name: Checkout repo (with LFS)
+uses: actions/checkout@v4
+with:
+lfs: true
 
-      - name: Install deps
-        run: pip install -r src/requirements.txt
 
-      - name: Install Kaggle
-        run: pip install kaggle
+- name: Ensure LFS objects pulled
+run: |
+git lfs install
+git lfs pull --include="model/resnet50_asl_augmented_frozen.h5" || true
 
-      - name: Prepare Kaggle credentials
-        env:
-          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
-        run: |
-            mkdir -p ~/.kaggle
-            echo "{\"username\":\"${KAGGLE_USERNAME}\",\"key\":\"${KAGGLE_KEY}\"}" > ~/.kaggle/kaggle.json
-            chmod 600 ~/.kaggle/kaggle.json
-            kaggle --version
 
-      - name: Download ASL dataset from Kaggle
-        run: |
-          mkdir -p data
-          kaggle datasets download -d grassknotted/asl-alphabet -p data --unzip
-          ls -R data
+- name: Setup Python
+uses: actions/setup-python@v4
+with:
+python-version: '3.11'
 
-      - name: Run evaluation
-        run: python src/evaluate.py
+
+- name: Install deps
+run: pip install -r src/requirements.txt
+
+
+- name: Prepare Kaggle credentials
+env:
+KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+run: |
+mkdir -p ~/.kaggle
+echo "{\"username\":\"${KAGGLE_USERNAME}\",\"key\":\"${KAGGLE_KEY}\"}" > ~/.kaggle/kaggle.json
+chmod 600 ~/.kaggle/kaggle.json
+kaggle --version
+wc -c ~/.kaggle/kaggle.json
+
+
+- name: Download ASL dataset from Kaggle
+run: |
+mkdir -p data
+kaggle datasets download -d grassknotted/asl-alphabet -p data --unzip
+ls -R data
+
+
+- name: Run evaluation
+run: python src/evaluate.py
