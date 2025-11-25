@@ -14,9 +14,10 @@ SEED = int(os.environ.get("SEED", 42))
 LOCAL_H5_PATH = os.environ.get("LOCAL_H5_PATH", "models/resnet50_asl_augmented_frozen.h5")
 
 # Dataset path (change or export ASL_TRAIN_DIR environment variable)
-ASL_TRAIN_DIR = os.environ.get("ASL_TRAIN_DIR", "data/asl_alphabet_train")
+asl_train_dir = "data/asl_alphabet_train"
 
-def get_val_gen(batch_size=BATCH_SIZE, img_size=IMG_SIZE, seed=SEED, data_dir=ASL_TRAIN_DIR):
+
+def get_val_gen(batch_size=BATCH_SIZE, img_size=IMG_SIZE, seed=SEED, data_dir=asl_train_dir):
     from tensorflow.keras.preprocessing.image import ImageDataGenerator
     val_datagen = ImageDataGenerator(validation_split=0.2)
     val_gen = val_datagen.flow_from_directory(
