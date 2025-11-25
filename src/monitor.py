@@ -6,7 +6,7 @@ from model_utils import get_val_gen, load_local_h5, load_model_from_registry
 
 MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI", None)
 MODEL_NAME = os.environ.get("MODEL_NAME", "ASL-ResNet-Production")
-LOCAL_MODEL_PATH = os.environ.get("LOCAL_H5_PATH", "model/resnet50_asl_augmented_frozen.h5")
+LOCAL_MODEL_PATH = os.environ.get("LOCAL_H5_PATH", "models/resnet50_asl_augmented_frozen.h5")
 THRESHOLD = float(os.environ.get("MONITOR_THRESHOLD", 0.90))
 MAX_BATCHES = int(os.environ.get("MONITOR_MAX_BATCHES", 3))
 
