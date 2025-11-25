@@ -11,15 +11,38 @@ jobs:
     env:
       LOCAL_H5_PATH: models/resnet50_asl_augmented_frozen.h5
       MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}  # optional
+
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true
+
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+
       - name: Install deps
         run: pip install -r src/requirements.txt
+
+      # 🆕  ADD KAGGLE DOWNLOAD HERE
+      - name: Install Kaggle
+        run: pip install kaggle
+
+      - name: Download ASL dataset from Kaggle
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          mkdir -p data
+          kaggle datasets download -d grassknotted/asl-alphabet -p data --unzip
+          ls -R data
+
+      # 🆕  OPTIONAL: confirm the dataset path
+      - name: Show dataset structure
+        run: |
+          echo "Dataset downloaded to:"
+          ls -R data
+
+      # RUN EVALUATION AFTER DATASET IS READY
       - name: Run evaluation
         run: python src/evaluate.py
-
