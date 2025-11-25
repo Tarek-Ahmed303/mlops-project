@@ -1,1 +1,25 @@
+name: Evaluate
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    env:
+      LOCAL_H5_PATH: model/resnet50_asl_augmented_frozen.h5
+      MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}  # optional
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install -r src/requirements.txt
+      - name: Run evaluation
+        run: python src/evaluate.py
 
