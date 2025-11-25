@@ -7,7 +7,7 @@ from model_utils import get_val_gen, load_local_h5, load_model_from_registry, sa
 
 MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI", None)
 MODEL_NAME = os.environ.get("MODEL_NAME", "ASL-ResNet-Production")
-LOCAL_MODEL_PATH = os.environ.get("LOCAL_H5_PATH", "model/resnet50_asl_augmented_frozen.h5")
+LOCAL_MODEL_PATH = os.environ.get("LOCAL_H5_PATH", "models/resnet50_asl_augmented_frozen.h5")
 
 def load_model_with_fallback():
     if MLFLOW_TRACKING_URI:
