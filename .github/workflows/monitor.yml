@@ -25,29 +25,25 @@ jobs:
       - name: Install deps
         run: pip install -r src/requirements.txt
 
-      # 🆕 ADD THESE STEPS (same as evaluate)
+     # Add these steps BEFORE 'Run evaluation' / 'Run monitoring'
       - name: Install Kaggle
         run: pip install kaggle
 
       - name: Prepare Kaggle credentials
         env:
-          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
-          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+            KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+            KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
         run: |
-          mkdir -p ~/.kaggle
-          echo "{\"username\":\"${KAGGLE_USERNAME}\",\"key\":\"${KAGGLE_KEY}\"}" > ~/.kaggle/kaggle.json
-          chmod 600 ~/.kaggle/kaggle.json
-          kaggle --version
+            mkdir -p ~/.kaggle
+            echo "{\"username\":\"${KAGGLE_USERNAME}\",\"key\":\"${KAGGLE_KEY}\"}" > ~/.kaggle/kaggle.json
+            chmod 600 ~/.kaggle/kaggle.json
+            kaggle --version
 
       - name: Download ASL dataset from Kaggle
         run: |
-          mkdir -p data
-          kaggle datasets download -d grassknotted/asl-alphabet -p data --unzip
-          ls -R data
-
-      # 🆕 optional: show dirs
-      - name: Show dataset
-        run: ls -R data
+           mkdir -p data
+           kaggle datasets download -d grassknotted/asl-alphabet -p data --unzip
+           ls -R data
 
       # RUN MONITORING AFTER DATASET EXISTS
       - name: Run monitoring
