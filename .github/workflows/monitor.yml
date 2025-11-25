@@ -11,7 +11,7 @@ jobs:
 monitor:
 runs-on: ubuntu-latest
 env:
-LOCAL_H5_PATH: model/resnet50_asl_augmented_frozen.h5
+LOCAL_H5_PATH: models/resnet50_asl_augmented_frozen.h5
 MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
 
 
